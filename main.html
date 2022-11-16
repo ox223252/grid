@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head></head>
+	<body>
+		<section>
+			<label for="param" style="border:1px solid black">change order</label>
+			<div id="a" style="background: grey;">a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a </div>
+			<div id="b" style="background: grey;">b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b b </div>
+			<div id="c" style="background: blue;">c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c </div>
+			<div id="d" style="background: red;">d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d </div>
+			<div id="e" style="background: grey;">e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e </div>
+		</section>
+		<section id="mainData">
+		</section>
+		<script type="text/javascript" src="grid.js"></script>
+		<script type="text/javascript">
+			let config = {
+				size:300, ///< size of each cell in grid
+				configBox:{
+					id:"param",
+				},
+				buttons:{
+					up:{
+						innerHTML:"&lt",
+						cssText:"",
+					},
+					down:{
+						innerHTML:"+",
+						cssText:"",
+					},
+				},
+				dataset:[
+					{
+						el:document.getElementById("a"), ///< element need to be placed in table
+						// cell reserved to create next cell
+						x:1, ///< nb column
+						y:1, ///< bumber of line
+					},
+					{
+						el:document.getElementById("b"), ///< element need to be placed in table
+						// cell reserved to create next cell
+						x:1, ///< nb column
+						y:1, ///< bumber of line
+					},
+					{
+						el:document.getElementById("c"), ///< element need to be placed in table
+						// cell reserved to create next cell
+						x:2, ///< nb column
+						y:1, ///< bumber of line
+					},
+					{
+						el:document.getElementById("d"), ///< element need to be placed in table
+						// cell reserved to create next cell
+						x:1, ///< nb column
+						y:2, ///< bumber of line
+					},
+					{
+						el:document.getElementById("e"), ///< element need to be placed in table
+						// cell reserved to create next cell
+						x:1, ///< nb column
+						y:1, ///< bumber of line
+					}
+				],
+			};
+			let grid = new Grid ( document.getElementById ( "mainData"), config, (arg)=>{
+				console.log( arg );
+			}, "callback_arg" );
+		</script>
+	</body>
+</html>
