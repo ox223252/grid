@@ -7,10 +7,15 @@ class Grid {
 		this.callback = callback;
 		this.args = args;
 
-		this.update ( );
+		this.draw ( "create", false );
 	}
 
-	update ( checked = false )
+	update ( event_id )
+	{
+		this.draw ( event_id, false );
+	}
+
+	draw ( event, checked = false )
 	{
 		if ( !this.target )
 		{
@@ -148,7 +153,7 @@ class Grid {
 
 		if ( this.callback )
 		{
-			this.callback ( this.args )
+			this.callback ( event, this.args )
 		}
 	}
 
@@ -249,7 +254,7 @@ class Grid {
 			}
 		}
 
-		this.update ( true );
+		this.draw ( "update", true );
 	}
 
 	_getNextCell ( index, size )
