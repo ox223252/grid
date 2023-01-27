@@ -8,6 +8,8 @@ class Grid {
 		this.args = args;
 
 		this.draw ( "create", false );
+
+		window.addEventListener ('resize',()=>{console.log (); this.draw()});
 	}
 
 	update ( event_id )
