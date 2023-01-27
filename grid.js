@@ -184,6 +184,7 @@ class Grid {
 			let bUp = document.createElement ( "button" )
 			bUp.innerHTML = this.config.buttons.up.innerHTML;
 			bUp.style.cssText = this.config.buttons.up.cssText;
+			bUp.title = index;
 			bUp.addEventListener ( "click", (e)=>{this._change(e,"up")});
 			div.appendChild ( bUp )
 		}
@@ -203,6 +204,7 @@ class Grid {
 			let bDown = document.createElement ( "button" )
 			bDown.innerHTML = this.config.buttons.down.innerHTML
 			bDown.style.cssText = this.config.buttons.down.cssText;
+			bDown.title = index;
 			bDown.addEventListener ( "click", (e)=>{this._change(e,"down")});
 			div.appendChild ( bDown )
 		}
@@ -226,14 +228,13 @@ class Grid {
 		let index = 0;
 		while ( index < this.config.dataset.length )
 		{
-			// console.log ( this.config.dataset[ index ] )
 			if ( this.config.dataset[ index ].cell.id == ori )
 			{
 				break;
 			}
 			index++;
 		}
-		
+
 		switch ( mode )
 		{
 			case "up":
