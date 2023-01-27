@@ -44,7 +44,7 @@ class Grid {
 		
 		let table = document.createElement ( "table" );
 		table.classList = "grid"
-		table.style.width = "calc( 100% - 20px );"
+		table.style.width = "100%"
 		table.style.tableLayout = "fixed"
 
 		let line = document.createElement( "tr" );
