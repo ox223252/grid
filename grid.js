@@ -113,11 +113,11 @@ class Grid {
 			let cell = this._getCell ( next );
 			if ( nbCols >= cell.colSpan )
 			{
-				cell.style.width = ( width * cell.colSpan )+'px';
+				cell.style.width = ( cell.colSpan / nbCols * 100 )+'%';
 			}
 			else
 			{
-				cell.style.width = ( width * nbCols )+'px';
+				cell.style.width = '100%';
 			}
 			line.appendChild ( cell );
 			
