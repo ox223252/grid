@@ -24,7 +24,7 @@
 			#div_10 {background-color: rgba(0,0,0,0.1);}
 		</style>
 	</head>
-	<body id="body">
+	<body>
 		<nav>
 			<label for=param><img src="https://cdn3.iconfinder.com/data/icons/linecons-free-vector-icons-pack/32/params-512.png" width="40px"></label>
 		</nav>
@@ -41,8 +41,65 @@
 				<div id="div_09">div_09</div>
 				<div id="div_10">div_10</div>
 		</section>
+		<section>
+			<input type="number" value="300" onchange="stackGrid.change ( this.value )" />
+			<div id="stackGrid" data-grid-width="300">
+				<img class="grid-content" src="https://www.w3schools.com//w3images/wedding.jpg"/>
+				<img class="grid-content" src="https://www.w3schools.com//w3images/rocks.jpg"/>
+				<div class="grid-content" style="border: solid 1px black;margin-left: 2px;margin-right: 2px;padding-left: 2px;padding-right: 2px;">
+					<h2 style="text-align: center">L'Albatros</h2>
+					<p style="text-align: center">
+						Souvent, pour s'amuser, les hommes d'équipage <br>
+						Prennent des albatros, vastes oiseaux des mers, <br>
+						Qui suivent, indolents compagnons de voyage, <br>
+						Le navire glissant sur les gouffres amers. <br>
+						A peine les ont-ils déposés sur les planches, <br>
+						Que ces rois de l'azur, maladroits et honteux, <br>
+						Laissent piteusement leurs grandes ailes blanches <br>
+						Comme des avirons traîner à côté d'eux. <br>
+						Ce voyageur ailé, comme il est gauche et veule! <br>
+						Lui, naguère si beau, qu'il est comique et laid! <br>
+						L'un agace son bec avec un brûle-gueule, <br>
+						L'autre mime, en boitant, l'infirme qui volait! <br>
+						Le Poète est semblable au prince des nuées <br>
+						Qui hante la tempête et se rit de l'archer; <br>
+						Exilé sur le sol au milieu des huées, <br>
+						Ses ailes de géant l'empêchent de marcher.<br>
+					</p>
+				</div>
+				<img class="grid-content" src="https://www.w3schools.com//w3images/falls2.jpg"/>
+				<img class="grid-content" src="https://www.w3schools.com//w3images/paris.jpg"/>
+				<div class="grid-content" style="border: solid 1px black;margin-left: 2px;margin-right: 2px;padding-left: 2px;padding-right: 2px;">
+					<h2 style="text-align: center">L'Albatros</h2>
+					<p style="text-align: center">
+						Souvent, pour s'amuser, les hommes d'équipage <br>
+						Prennent des albatros, vastes oiseaux des mers, <br>
+						Qui suivent, indolents compagnons de voyage, <br>
+						Le navire glissant sur les gouffres amers. <br>
+						A peine les ont-ils déposés sur les planches, <br>
+						Que ces rois de l'azur, maladroits et honteux, <br>
+						Laissent piteusement leurs grandes ailes blanches <br>
+						Comme des avirons traîner à côté d'eux. <br>
+						Ce voyageur ailé, comme il est gauche et veule! <br>
+						Lui, naguère si beau, qu'il est comique et laid! <br>
+						L'un agace son bec avec un brûle-gueule, <br>
+						L'autre mime, en boitant, l'infirme qui volait! <br>
+						Le Poète est semblable au prince des nuées <br>
+						Qui hante la tempête et se rit de l'archer; <br>
+						Exilé sur le sol au milieu des huées, <br>
+						Ses ailes de géant l'empêchent de marcher.<br>
+					</p>
+				</div>
+				<img class="grid-content" src="https://www.w3schools.com//w3images/nature.jpg"/>
+				<img class="grid-content" src="https://www.w3schools.com//w3images/mist.jpg"/>
+				<img class="grid-content" src="https://www.w3schools.com//w3images/mountainskies.jpg"/>
+				<img class="grid-content" src="https://www.w3schools.com//w3images/underwater.jpg"/>
+				<img class="grid-content" src="https://www.w3schools.com//w3images/ocean.jpg"/>
+			</div>
+		</section>
 	</body>
 	<script type="text/javascript" src="Grid.js" ></script>
+	<script type="text/javascript" src="StackGrid.js"></script>
 	<script type="text/javascript">
 		let config = {
 			size:150,
@@ -76,6 +133,13 @@
 		}
 
 		let grid = new Grid ( document.getElementById ( "mainData"), config );
+		
+		let stackGrid = new StackGrid ( document.getElementById ( "stackGrid" ) );
+
+		// need to wait en end of the loading to have the right size of elements
+		window.onload = ()=>{
+			stackGrid.draw ( );
+		}
 	</script>
 	</body>
 </html>
