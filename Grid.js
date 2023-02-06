@@ -29,13 +29,13 @@ class Grid {
 			this.target.removeChild( this.target.childNodes[0] );
 		}
 
-		let nbCols = Math.floor ( ( this.target.clientWidth - 20 ) / this.config.size );
+		let nbCols = Math.floor ( ( this.target.clientWidth ) / this.config.size );
 		if ( nbCols <= 0 )
 		{
 			nbCols = 1;
 		}
 
-		let width = ( this.target.clientWidth - 20 ) / nbCols;
+		let width = ( this.target.clientWidth ) / nbCols;
 
 		let rowId = 0;
 		let rowLastId = undefined;
@@ -118,6 +118,11 @@ class Grid {
 			else
 			{
 				cell.style.width = '100%';
+			}
+
+			if ( cell.colSpan > nbCols )
+			{
+				cell.colSpan = nbCols;
 			}
 			line.appendChild ( cell );
 			
