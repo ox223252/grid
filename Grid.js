@@ -155,7 +155,7 @@ class Grid {
 			input.checked = checked;
 			
 			this.target.appendChild ( input );
-		} 
+		}
 		this.target.appendChild ( table );
 
 		if ( this.callback )
@@ -177,22 +177,11 @@ class Grid {
 		div.style.height = '100%';
 		div.style.width = '100%';
 		div.style.display = 'flex';
+		div.style.position = "relative";
 		div.style.alignItems = 'center';
 		div.style.justifyContent = "space-between";
 
-		this.config.dataset[ index ].cell.appendChild ( div )
-
-		if ( this.config.buttons
-			&& this.config.buttons.up
-			&& this.config.buttons.up.innerHTML )
-		{
-			let bUp = document.createElement ( "button" )
-			bUp.innerHTML = this.config.buttons.up.innerHTML;
-			bUp.style.cssText = this.config.buttons.up.cssText;
-			bUp.title = index;
-			bUp.addEventListener ( "click", (e)=>{this._change(e,"up")});
-			div.appendChild ( bUp )
-		}
+		this.config.dataset[ index ].cell.appendChild ( div );
 
 		if ( this.config.dataset[ index ].el )
 		{
@@ -202,16 +191,51 @@ class Grid {
 			div.appendChild ( this.config.dataset[ index ].el );
 		}
 
-		if ( this.config.buttons
-			&& this.config.buttons.down
-			&& this.config.buttons.down.innerHTML )
+		if ( !this.config.buttons )
 		{
-			let bDown = document.createElement ( "button" )
-			bDown.innerHTML = this.config.buttons.down.innerHTML
-			bDown.style.cssText = this.config.buttons.down.cssText;
-			bDown.title = index;
-			bDown.addEventListener ( "click", (e)=>{this._change(e,"down")});
-			div.appendChild ( bDown )
+
+		}
+		else for ( let item of [ "up", "down", "remove", "update" ] )
+		{
+			if ( !this.config.buttons[ item ] )
+			{
+				continue;
+			}
+
+			let button = document.createElement ( "button" );
+			div.appendChild ( button );
+			button.style.cssText = this.config.buttons[ item ].cssText || "";
+			button.innerHTML = this.config.buttons[ item ].innerHTML || "";
+			button.style.position ||= "absolute";
+			button.style.fontSize ||= "1em";
+
+			button.title = index;
+			button.addEventListener ( "click", (e)=>{this._change(e,item)});
+
+			switch ( item )
+			{
+				case "up":
+				{
+					button.innerHTML ||= "&#x21E6";
+					button.style.left ||= 0;
+					break;
+				}
+				case "down":
+				{
+					button.innerHTML ||= "&#x21E8";
+					button.style.right ||= 0;
+					break;
+				}
+				case "remove":
+				{
+					button.innerHTML ||= "&#x274C;";
+					button.style.fontWeight ||= "bold";
+					button.style.top ||= 0;
+					button.style.right ||= 0;
+					button.style.height ||= "1.3em";
+					break;	
+				}
+			}
 		}
 
 		return this.config.dataset[ index ].cell
@@ -258,6 +282,15 @@ class Grid {
 					return;
 				}
 				this.config.dataset.splice ( index+1, 0, this.config.dataset.splice ( index, 1 )[0] );
+				break;
+			}
+			case "remove":
+			{
+				if ( index >= this.config.dataset.length )
+				{
+					return;
+				}
+				this.config.dataset.splice ( index, 1 );
 				break;
 			}
 		}
