@@ -1,11 +1,10 @@
 "use strict";
 class Grid {
-	constructor ( target, config, callback, args = {} )
+	constructor ( params = {} )
 	{
-		this.target = target;
-		this.config = config;
-		this.callback = callback;
-		this.args = args;
+		this.target = params.target;
+		this.config = params.config;
+		this.callback = params.callback;
 
 		this.draw ( "create", false );
 
@@ -52,7 +51,11 @@ class Grid {
 		let index = 0;
 		while ( true )
 		{
-			if ( index >= this.config.dataset.length )
+			if ( ( this.config.editable )
+				&& ( index == this.config.dataset.length ) )
+			{ // if dataset is editable
+			}
+			else if ( index >= this.config.dataset.length )
 			{ // index out of array
 				table.appendChild ( line );
 				while ( colUsed[ rowId + 1 ] )
@@ -143,9 +146,11 @@ class Grid {
 			&& this.config.configBox.id )
 		{ // create the buttons
 			let style = document.createElement ( "style" );
-			style.innerHTML = '#'+this.config.configBox.id+'{display:none}'
-			+'#'+this.config.configBox.id+' + table td > div > button {display:none}'
-			+'#'+this.config.configBox.id+':checked + table td > div > button {display:block}'
+			style.innerHTML = '#'+this.config.configBox.id+'{display:none}\n'
+			+'#'+this.config.configBox.id+' + table td > div > button {display:none}\n'
+			+'#'+this.config.configBox.id+':checked + table td > div > button {display:block}\n'
+			+'#'+this.config.configBox.id+' + table td:has(div.'+this.config.configBox.id+') {color:red}\n'
+			+'#'+this.config.configBox.id+':checked + table .'+this.config.configBox.id+' {display:inherit}\n'
 
 			this.target.appendChild ( style );
 
@@ -153,19 +158,28 @@ class Grid {
 			input.id = this.config.configBox.id;
 			input.type = 'checkbox'
 			input.checked = checked;
+			input.onchange = (ev)=>{
+				this.paramDiv.style.display = ev.target.checked ? "" : "none";
+			}
 			
 			this.target.appendChild ( input );
 		}
 		this.target.appendChild ( table );
 
-		if ( this.callback )
+		if ( ( this.callback )
+			&& ( this.callback.update ) )
 		{
-			this.callback ( event, this.args )
+			this.callback.update ( event )
 		}
 	}
 
 	_getCell ( index )
 	{
+		if ( index == this.config.dataset.length )
+		{
+			return this._getParamCell ( this.config.dataset.length );
+		}
+
 		this.config.dataset[ index ].cell = document.createElement ( "td" );
 		this.config.dataset[ index ].cell.id = "cel_"+index
 		this.config.dataset[ index ].cell.classList = "gridCell"
@@ -250,6 +264,42 @@ class Grid {
 		return this.config.dataset[ index ].cell
 	}
 
+	_getParamCell ( index )
+	{
+		this.paramDiv = document.createElement ( "td" );
+		this.paramDiv.id = "cel_"+index
+		this.paramDiv.classList = "gridCell"
+		this.paramDiv.style.height = '100%';
+		this.paramDiv.style.display = 'none';
+		this.paramDiv.colSpan = 1;
+		this.paramDiv.rowSpan = 1;
+
+		let div = document.createElement ( "div" );
+		div.className = this.config.configBox.id;
+		div.style.height = '100%';
+		div.style.width = '100%';
+		div.style.display = 'flex';
+		div.style.position = "relative";
+		div.style.alignItems = 'center';
+		div.style.justifyContent = "space-between";
+		div.style.cursor = "pointer";
+		div.style.fontSize = "3em";
+		div.style.justifyContent = "center";
+		div.appendChild ( document.createTextNode ( '+' ) );
+
+console.log ( this )
+
+		if ( ( this.callback )
+			&& ( this.callback.add ) )
+		{
+			div.onclick = this.callback.add;
+		}
+
+		this.paramDiv.appendChild ( div );
+		
+		return this.paramDiv;
+	}
+
 	_change ( e, mode )
 	{
 		let el = e.target;
@@ -309,6 +359,10 @@ class Grid {
 
 	_getNextCell ( index, size )
 	{
+		if ( index >= this.config.dataset.length )
+		{
+			return this.config.dataset.length;
+		}
 		while ( index < this.config.dataset.length )
 		{
 			if ( this.config.dataset[ index ].x <= size )
@@ -322,14 +376,34 @@ class Grid {
 
 	_updateColUsed ( index, colUsed, colId, rowId, nbCols )
 	{
-		for ( let j = 0; j < this.config.dataset[ index ].y; j++ )
+		let horizontal = undefined;
+		if ( this.config.dataset[ index ] )
+		{
+			horizontal = this.config.dataset[ index ].x;
+		}
+		else
+		{
+			horizontal = this.paramDiv.colSpan;
+		}
+
+		let vertical = undefined;
+		if ( this.config.dataset[ index ] )
+		{
+			vertical = this.config.dataset[ index ].y;
+		}
+		else
+		{
+			vertical = this.paramDiv.rowSpan;
+		}
+
+		for ( let j = 0; j < vertical; j++ )
 		{
 			if ( colUsed[ rowId + j ] == undefined )
 			{
 				colUsed[ rowId + j ] = [];
 			}
 			
-			for ( let i = 0; i < this.config.dataset[ index ].x; i++ )
+			for ( let i = 0; i < horizontal; i++ )
 			{
 				colUsed[ rowId + j ][ colId + i] = index;
 			}
