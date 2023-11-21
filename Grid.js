@@ -235,6 +235,15 @@ class Grid {
 					button.style.height ||= "1.3em";
 					break;	
 				}
+				case "update":
+				{
+					button.innerHTML ||= "&#8635;";
+					button.style.fontWeight ||= "bold";
+					button.style.top ||= 0;
+					button.style.right ||= "1.4em";
+					button.style.height ||= "1.3em";
+					break;
+				}
 			}
 		}
 
