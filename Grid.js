@@ -301,7 +301,7 @@ class Grid {
 		this.paramDiv.id = "cel_"+index
 		this.paramDiv.classList = "gridCell"
 		this.paramDiv.style.height = '100%';
-		this.paramDiv.style.display = 'none';
+		this.paramDiv.style.display = ( this.input && this.input.checked )?"":"none";
 		this.paramDiv.colSpan = 1;
 		this.paramDiv.rowSpan = 1;
 
