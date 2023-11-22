@@ -23,11 +23,54 @@ class Grid {
 			return;
 		}
 
-		while ( this.target.childNodes.length )
-		{ // clean the target
-			this.target.removeChild( this.target.childNodes[0] );
+		// remove elements not created by Grid.js
+		let numChild = 0;
+		do
+		{
+			let c = this.target.children[ numChild ];
+			if ( ( c == this.table )
+				|| ( c == this.style )
+				|| ( c == this.input ) )
+			{
+				numChild ++;
+				continue;
+			}
+
+			this.target.removeChild( c );
+		}
+		while ( numChild < this.target.children.length );
+
+		// add config and style div
+		if ( this.config.configBox
+			&& this.config.configBox.id )
+		{ // create the buttons
+			if ( undefined == this.style )
+			{
+				this.style = document.createElement ( "style" );
+				this.style.innerHTML = '#'+this.config.configBox.id+'{display:none}\n'
+				+'#'+this.config.configBox.id+' + table td > div > button {display:none}\n'
+				+'#'+this.config.configBox.id+':checked + table td > div > button {display:block}\n'
+				+'#'+this.config.configBox.id+' + table td:has(div.'+this.config.configBox.id+') {color:red}\n'
+				+'#'+this.config.configBox.id+':checked + table .'+this.config.configBox.id+' {display:inherit}\n'
+
+				this.target.appendChild ( this.style );
+			}
+
+			if ( undefined == this.input )
+			{
+				this.input = document.createElement ( "input" );
+				this.input.id = this.config.configBox.id;
+				this.input.type = 'checkbox'
+				this.input.checked = checked;
+				this.input.onchange = (ev)=>{
+					this.paramDiv.style.display = ev.target.checked ? "" : "none";
+				}
+				
+				this.target.appendChild ( this.input );
+			}
 		}
 
+		// calc grid size
 		let nbCols = Math.floor ( ( this.target.clientWidth ) / this.config.size );
 		if ( nbCols <= 0 )
 		{
@@ -41,13 +84,25 @@ class Grid {
 		let colUsed = [];
 		let colPrevious = [];
 		
-		let table = document.createElement ( "table" );
-		table.classList = "grid"
-		table.style.width = "100%"
-		table.style.tableLayout = "fixed"
+		// create grid
+		if ( undefined == this.table )
+		{
+			this.table = document.createElement ( "table" );
+			this.target.appendChild ( this.table );
+		}
+		else
+		{
+			let table = document.createElement ( "table" );
+			this.table.replaceWith ( table );
+			this.table = table;
+		}
 
+		this.table.classList = "grid"
+		this.table.style.width = "100%"
+		this.table.style.tableLayout = "fixed"
+
+		// feed grid
 		let line = document.createElement( "tr" );
-
 		let index = 0;
 		while ( true )
 		{
@@ -57,11 +112,11 @@ class Grid {
 			}
 			else if ( index >= this.config.dataset.length )
 			{ // index out of array
-				table.appendChild ( line );
+				this.table.appendChild ( line );
 				while ( colUsed[ rowId + 1 ] )
 				{ // no cell remainning but need more row
 					rowId++;
-					table.appendChild ( document.createElement( "tr" ) );
+					this.table.appendChild ( document.createElement( "tr" ) );
 				}
 				break;
 			}
@@ -76,7 +131,7 @@ class Grid {
 			if ( this._isRowfull ( colUsed, rowId, nbCols ) )
 			{ // if the row is full
 				rowId++;
-				table.appendChild ( line );
+				this.table.appendChild ( line );
 				line = document.createElement( "tr" );
 			}
 
@@ -107,7 +162,7 @@ class Grid {
 			{ // all remainning elements are larger than the remainning
 				// space in the line
 				rowId++;
-				table.appendChild ( line );
+				this.table.appendChild ( line );
 				line = document.createElement( "tr" );
 				continue;
 			}
@@ -141,30 +196,6 @@ class Grid {
 				index++;
 			}
 		}
-
-		if ( this.config.configBox
-			&& this.config.configBox.id )
-		{ // create the buttons
-			let style = document.createElement ( "style" );
-			style.innerHTML = '#'+this.config.configBox.id+'{display:none}\n'
-			+'#'+this.config.configBox.id+' + table td > div > button {display:none}\n'
-			+'#'+this.config.configBox.id+':checked + table td > div > button {display:block}\n'
-			+'#'+this.config.configBox.id+' + table td:has(div.'+this.config.configBox.id+') {color:red}\n'
-			+'#'+this.config.configBox.id+':checked + table .'+this.config.configBox.id+' {display:inherit}\n'
-
-			this.target.appendChild ( style );
-
-			let input = document.createElement ( "input" );
-			input.id = this.config.configBox.id;
-			input.type = 'checkbox'
-			input.checked = checked;
-			input.onchange = (ev)=>{
-				this.paramDiv.style.display = ev.target.checked ? "" : "none";
-			}
-			
-			this.target.appendChild ( input );
-		}
-		this.target.appendChild ( table );
 
 		if ( ( this.callback )
 			&& ( this.callback.update ) )
@@ -287,8 +318,6 @@ class Grid {
 		div.style.justifyContent = "center";
 		div.appendChild ( document.createTextNode ( '+' ) );
 
-console.log ( this )
-
 		if ( ( this.callback )
 			&& ( this.callback.add ) )
 		{
@@ -359,7 +388,7 @@ console.log ( this )
 
 	_getNextCell ( index, size )
 	{
-		if ( index >= this.config.dataset.length )
+		if ( index == this.config.dataset.length )
 		{
 			return this.config.dataset.length;
 		}
