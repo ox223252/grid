@@ -198,9 +198,9 @@ class Grid {
 		}
 
 		if ( ( this.callback )
-			&& ( this.callback.update ) )
+			&& ( this.callback.draw ) )
 		{
-			this.callback.update ( event )
+			this.callback.draw ( event )
 		}
 	}
 
@@ -255,7 +255,15 @@ class Grid {
 			button.style.fontSize ||= "1em";
 
 			button.title = index;
-			button.addEventListener ( "click", (e)=>{this._change(e,item)});
+			button.addEventListener ( "click", (e)=>{
+				this._change(e,item);
+
+				if ( ( this.callback )
+					&& ( this.callback[ item ] ) )
+				{
+					this.callback[ item ] ( e, index );
+				}
+			});
 
 			switch ( item )
 			{
