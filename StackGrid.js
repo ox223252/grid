@@ -17,7 +17,29 @@ class StackGrid {
 
 		let width = this.target.getAttribute( "data-grid-width" );
 		let raw = this.target.getElementsByClassName( "grid-raw" );
-		let column = Math.floor ( this.target.clientWidth / width );
+
+
+		// calc grid size
+		let column = 1;
+		if ( 0 < this.config.size.indexOf ( "%" ) )
+		{
+			column = Math.floor ( 100 / this.config.size.replace ( "%", "" ) );
+			if ( !isNaN ( this.config.minSize )
+				&& ( this.target.clientWidth / column < this.config.minSize ) )
+			{
+				column = Math.floor ( ( this.target.clientWidth ) / this.config.minSize );
+			}
+		}
+		else if ( ! isNaN ( this.config.size ) )
+		{
+			column = Math.floor ( ( this.target.clientWidth ) / this.config.size );
+		}
+
+		if ( column <= 0 )
+		{
+			column = 1;
+		}
+		
 		let divs = this.target.getElementsByClassName( "grid-column" );
 
 		// if not the correct number of column

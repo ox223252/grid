@@ -71,12 +71,26 @@ class Grid {
 		}
 
 		// calc grid size
-		let nbCols = Math.floor ( ( this.target.clientWidth ) / this.config.size );
+		let nbCols = 1;
+		if ( 0 < this.config.size.indexOf ( "%" ) )
+		{
+			nbCols = Math.floor ( 100 / this.config.size.replace ( "%", "" ) );
+			if ( !isNaN ( this.config.minSize )
+				&& ( this.target.clientWidth / nbCols < this.config.minSize ) )
+			{
+				nbCols = Math.floor ( ( this.target.clientWidth ) / this.config.minSize );
+			}
+		}
+		else if ( ! isNaN ( this.config.size ) )
+		{
+			nbCols = Math.floor ( ( this.target.clientWidth ) / this.config.size );
+		}
+
 		if ( nbCols <= 0 )
 		{
 			nbCols = 1;
 		}
-
+		
 		let width = ( this.target.clientWidth ) / nbCols;
 
 		let rowId = 0;
