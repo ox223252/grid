@@ -21,7 +21,8 @@ class StackGrid {
 
 		// calc grid size
 		let column = 1;
-		if ( 0 < this.config.size.indexOf ( "%" ) )
+		if ( ( "String" == this.config.size?.constructor.name )
+			&& ( 0 < this.config.size.indexOf ( "%" ) ) )
 		{
 			column = Math.floor ( 100 / this.config.size.replace ( "%", "" ) );
 			if ( !isNaN ( this.config.minSize )

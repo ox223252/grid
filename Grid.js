@@ -4,19 +4,19 @@ class Grid {
 
 	constructor ( params = {} )
 	{
-		if ( 0 > window.navigator.userAgent.indexOf ( "Chromium" ) )
+		if ( 0 < window.navigator.userAgent.indexOf ( "Chromium" ) )
 		{
 			this.#UA = "Chromium";
 		}
-		else if ( 0 > window.navigator.userAgent.indexOf ( "Chrome" ) )
+		else if ( 0 < window.navigator.userAgent.indexOf ( "Chrome" ) )
 		{
 			this.#UA = "Chrome";
 		}
-		else if ( 0 > window.navigator.userAgent.indexOf ( "Safari" ) )
+		else if ( 0 < window.navigator.userAgent.indexOf ( "Safari" ) )
 		{
 			this.#UA = "Safari";
 		}
-		else if ( 0 > window.navigator.userAgent.indexOf ( "Firefox" ) )
+		else if ( 0 < window.navigator.userAgent.indexOf ( "Firefox" ) )
 		{
 			this.#UA = "Firefox";
 		}
@@ -91,7 +91,8 @@ class Grid {
 
 		// calc grid size
 		let nbCols = 1;
-		if ( 0 < this.config.size.indexOf ( "%" ) )
+		if ( ( "String" == this.config.size?.constructor.name )
+			&& ( 0 < this.config.size.indexOf ( "%" ) ) )
 		{
 			nbCols = Math.floor ( 100 / this.config.size.replace ( "%", "" ) );
 			if ( !isNaN ( this.config.minSize )
@@ -109,7 +110,7 @@ class Grid {
 		{
 			nbCols = 1;
 		}
-		
+
 		let width = ( this.target.clientWidth ) / nbCols;
 
 		let rowId = 0;
@@ -253,7 +254,7 @@ class Grid {
 			case "Chrome":
 				this.config.dataset[ index ].cell.style.height = "1px";
 				break;
-			case "FireFox":
+			case "Firefox":
 				this.config.dataset[ index ].cell.style.height = '100%';
 				break;
 		}
