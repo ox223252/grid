@@ -1,7 +1,26 @@
 "use strict";
 class Grid {
+	#UA = "";
+
 	constructor ( params = {} )
 	{
+		if ( 0 > window.navigator.userAgent.indexOf ( "Chromium" ) )
+		{
+			this.#UA = "Chromium";
+		}
+		else if ( 0 > window.navigator.userAgent.indexOf ( "Chrome" ) )
+		{
+			this.#UA = "Chrome";
+		}
+		else if ( 0 > window.navigator.userAgent.indexOf ( "Safari" ) )
+		{
+			this.#UA = "Safari";
+		}
+		else if ( 0 > window.navigator.userAgent.indexOf ( "Firefox" ) )
+		{
+			this.#UA = "Firefox";
+		}
+
 		this.target = params.target;
 		this.config = params.config;
 		this.callback = params.callback;
@@ -228,7 +247,16 @@ class Grid {
 		this.config.dataset[ index ].cell = document.createElement ( "td" );
 		this.config.dataset[ index ].cell.id = "cel_"+index
 		this.config.dataset[ index ].cell.classList = "gridCell"
-		this.config.dataset[ index ].cell.style.height = '100%';
+		switch ( this.#UA )
+		{
+			case "Chromium":
+			case "Chrome":
+				this.config.dataset[ index ].cell.style.height = "1px";
+				break;
+			case "FireFox":
+				this.config.dataset[ index ].cell.style.height = '100%';
+				break;
+		}
 		this.config.dataset[ index ].cell.colSpan = this.config.dataset[ index ].x
 		this.config.dataset[ index ].cell.rowSpan = this.config.dataset[ index ].y
 
