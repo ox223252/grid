@@ -138,6 +138,11 @@ class Grid {
 		// feed grid
 		let line = document.createElement( "tr" );
 		let index = 0;
+		if ( !this.config.dataset )
+		{
+			this.config.dataset = [];
+		}
+
 		while ( true )
 		{
 			if ( ( this.config.editable )
