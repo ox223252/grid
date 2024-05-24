@@ -1,7 +1,15 @@
 "use strict";
-class Grid {
-	#UA = "";
 
+/// \brief read JSON to create a grid display
+class Grid {
+	#UA = ""; ///< user agent to determine browser compatibility
+
+	/// \param [ in ] params : object with config parameters
+	///     target : dom elements where the grid will be displayed
+	///     config : grid config object (see README)
+	///     callback : object with functions used after each grid display
+	///         draw : called once the grid is drawed
+	///         add : function called on param cell add request
 	constructor ( params = {} )
 	{
 		if ( 0 < window.navigator.userAgent.indexOf ( "Chromium" ) )
@@ -44,11 +52,15 @@ class Grid {
 		}
 	}
 
+	/// \brief wrapper for draw function used for compatibility
 	update ( event_id )
 	{
 		this.draw ( event_id, false );
 	}
 
+	/// \brief function who draw the grid
+	/// \param [ in ] event : event passed to callback function
+	/// \param [ in ] checked : boolean, used if configbox definedin config
 	draw ( event, checked = false )
 	{
 		if ( !this.target )
@@ -243,7 +255,7 @@ class Grid {
 			line.appendChild ( cell );
 			
 			// update lines size
-			this._updateColUsed ( next, colUsed, nextEmpty.index, rowId, nbCols );
+			this._updateColUsed ( next, colUsed, nextEmpty.index, rowId );
 			
 			if ( next != index )
 			{ // save the element
@@ -262,6 +274,9 @@ class Grid {
 		}
 	}
 
+	/// \brief graw a cell, an give it to the caller
+	/// \param [ in ] index : index of the data used to feed the cell content from dataset config
+	/// \return a full cell
 	_getCell ( index )
 	{
 		if ( index == this.config.dataset.length )
@@ -380,6 +395,8 @@ class Grid {
 		return this.config.dataset[ index ].cell
 	}
 
+	/// \brief create a cell used to request add
+	/// \param [ in ] index : index used to set cell ID
 	_getParamCell ( index )
 	{
 		this.paramDiv = document.createElement ( "td" );
@@ -414,6 +431,9 @@ class Grid {
 		return this.paramDiv;
 	}
 
+	/// \brief function used on order change request 
+	/// \param [ in ] e : event object
+	/// \param [ in ] mode : change request mode
 	_change ( e, mode )
 	{
 		let el = e.target;
@@ -471,6 +491,10 @@ class Grid {
 		this.draw ( "update", true );
 	}
 
+	/// \brief function used to get the next cell who fit in the remaining place
+	/// \param [ in ] index : index of the first cell not added to the grid
+	/// \param [ in ] size : remaining place in the current line of the grid
+	/// \return index of the nex cell who fit else -1 if no cell fit
 	_getNextCell ( index, size )
 	{
 		if ( index == this.config.dataset.length )
@@ -488,7 +512,12 @@ class Grid {
 		return -1;
 	}
 
-	_updateColUsed ( index, colUsed, colId, rowId, nbCols )
+	/// \brief function used to update the backup of the placement in grid and set colSpan/rowSpan
+	/// \param [ in ] index : index of the celle to add in grid
+	/// \param [ in ] colUsed : table who represent the grid
+	/// \param [ in ] colId : index of curent col
+	/// \param [ in ] rowId : index of current row
+	_updateColUsed ( index, colUsed, colId, rowId )
 	{
 		let horizontal = undefined;
 		if ( this.config.dataset[ index ] )
@@ -524,6 +553,11 @@ class Grid {
 		}
 	}
 
+	/// \brief check if row is full or not
+	/// \param [ in ] colUsed : table who represent the grid
+	/// \param [ in ] rowId : index of current row
+	/// \param [ in ] nbCols : number of of cols in the table
+	/// \return true if full and false if not full
 	_isRowfull (  colUsed, rowId, nbCols )
 	{
 		if ( !colUsed[ rowId ]
@@ -542,6 +576,11 @@ class Grid {
 		return true;
 	}
 
+	/// \brief get teh next empty cell index and size
+	/// \param [ in ] colUsed : table who represent the grid
+	/// \param [ in ] rowId : index of current row
+	/// \param [ in ] nbCols : number of of cols in the table
+	/// \return object whit index and size
 	_getNextEmptycell ( colUsed, rowId, nbCols )
 	{
 		if ( !colUsed[ rowId ] )
