@@ -288,7 +288,7 @@ class Grid {
 		{
 
 		}
-		else for ( let item of [ "up", "down", "remove", "update" ] )
+		else for ( let item of [ "up", "down", "remove", "update", "index" ] )
 		{
 			if ( !this.config.buttons[ item ] )
 			{
@@ -342,6 +342,15 @@ class Grid {
 					button.style.fontWeight ||= "bold";
 					button.style.top ||= 0;
 					button.style.right ||= "1.4em";
+					button.style.height ||= "1.3em";
+					break;
+				}
+				case "index":
+				{
+					button.innerHTML = index;
+					button.style.top ||= 0;
+					button.style.left ||= 0;
+					button.style.width ||= "1.3em";
 					button.style.height ||= "1.3em";
 					break;
 				}
