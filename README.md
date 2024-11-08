@@ -45,7 +45,8 @@ let config = {
 			// cssText:"",
 			innerHTML:"&gt;"
 		}
-	}
+	},
+	editable: false
 }
 ```		
 

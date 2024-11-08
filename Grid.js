@@ -21,13 +21,27 @@ class Grid {
 			this.#UA = "Firefox";
 		}
 
-		this.target = params.target;
-		this.config = params.config;
-		this.callback = params.callback;
+		this.init ( params );
 
 		this.draw ( "create", false );
 
-		window.addEventListener ('resize',()=>{console.log (); this.draw()});
+		window.addEventListener ('resize',()=>{this.draw()});
+	}
+
+	init ( params = {} )
+	{
+		if ( params.target )
+		{
+			this.target = params.target;
+		}
+		if ( params.config )
+		{
+			this.config = params.config;
+		}
+		if ( params.callback )
+		{
+			this.callback = params.callback;
+		}
 	}
 
 	update ( event_id )
@@ -43,21 +57,18 @@ class Grid {
 		}
 
 		// remove elements not created by Grid.js
-		let numChild = 0;
-		do
+		for ( let c of this.target.children )
 		{
-			let c = this.target.children[ numChild ];
 			if ( ( c == this.table )
 				|| ( c == this.style )
 				|| ( c == this.input ) )
 			{
-				numChild ++;
 				continue;
 			}
 
 			this.target.removeChild( c );
 		}
-		while ( numChild < this.target.children.length );
+	
 
 		// add config and style div
 		if ( this.config.configBox
