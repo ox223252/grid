@@ -69,7 +69,6 @@ class Grid {
 			this.target.removeChild( c );
 		}
 	
-
 		// add config and style div
 		if ( this.config.configBox
 			&& this.config.configBox.id )
@@ -78,9 +77,10 @@ class Grid {
 			{
 				this.style = document.createElement ( "style" );
 				this.style.innerHTML = '#'+this.config.configBox.id+'{display:none}\n'
-				+'#'+this.config.configBox.id+' + table td > div > button {display:none}\n'
-				+'#'+this.config.configBox.id+':checked + table td > div > button {display:block}\n'
-				+'#'+this.config.configBox.id+' + table td:has(div.'+this.config.configBox.id+') {color:red}\n'
+				+'#'+this.config.configBox.id+' + table .gridHide {display:none}\n'
+				+'#'+this.config.configBox.id+':checked + table button.gridHide {display:block}\n'
+				+'#'+this.config.configBox.id+':checked + table tr.gridHide {display:table-row}\n'
+				+'#'+this.config.configBox.id+' + table .'+this.config.configBox.id+') {color:red}\n'
 				+'#'+this.config.configBox.id+':checked + table .'+this.config.configBox.id+' {display:inherit}\n'
 
 				this.target.appendChild ( this.style );
@@ -168,6 +168,7 @@ class Grid {
 					rowId++;
 					this.table.appendChild ( document.createElement( "tr" ) );
 				}
+
 				break;
 			}
 
@@ -178,7 +179,7 @@ class Grid {
 				continue;
 			}
 
-			if ( this._isRowfull ( colUsed, rowId, nbCols ) )
+			while ( this._isRowfull ( colUsed, rowId, nbCols ) )
 			{ // if the row is full
 				rowId++;
 				this.table.appendChild ( line );
@@ -187,6 +188,13 @@ class Grid {
 
 			// get the size of the next empty cell
 			let nextEmpty = this._getNextEmptycell ( colUsed, rowId, nbCols );
+
+			// last line empty with paramBox
+			if ( ( index == this.config.dataset.length )
+				&& ( nextEmpty.size == nbCols ) )
+			{
+				line.classList.add ( "gridHide" );
+			}
 
 			// search the next element to be displayed
 			let next = index;
@@ -312,6 +320,7 @@ class Grid {
 			button.innerHTML = this.config.buttons[ item ].innerHTML || "";
 			button.style.position ||= "absolute";
 			button.style.fontSize ||= "1em";
+			button.classList.add ( "gridHide" );
 
 			button.title = index;
 			button.addEventListener ( "click", (e)=>{
