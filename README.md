@@ -44,13 +44,24 @@ let config = {
 		down:{
 			// cssText:"",
 			innerHTML:"&gt;"
-		}
+		},
+		remove:{
+			innerHTML:null,
+			classList:["fa","fa-trash"]
+		},
+		update:true,
+		index:true
 	},
 	editable: false
 }
 ```		
 
 Permet de rajouter des boutons pour changer l'ordre d'affichage des cellules, en fonction d'une `checkbox`  d'on l'id est passé par `configBox.id`. Si la `checbox` n'existe pas elle est créé.
+
+plusieurs possibilitées pour configurer les boutons, comme :
+- `up / down` : avec dans le innerHTML le text (ou element à afficher),
+- `remove` : on defini qu'on veux pas de text mais juste une ou plusieurs classe(s),
+- `update / index` : on indique de laisser les elements par defaults
 
 # StackGrid :
 

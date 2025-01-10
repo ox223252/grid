@@ -332,7 +332,6 @@ class Grid {
 			let button = document.createElement ( "button" );
 			div.appendChild ( button );
 			button.style.cssText = this.config.buttons[ item ].cssText || "";
-			button.innerHTML = this.config.buttons[ item ].innerHTML || "";
 			button.style.position ||= "absolute";
 			button.style.fontSize ||= "1em";
 			button.classList.add ( "gridHide" );
@@ -348,23 +347,71 @@ class Grid {
 				}
 			});
 
-			switch ( item )
+			switch ( this.config.buttons[ item ].classList?.constructor.name )
+			{
+				case "Array":
+				{
+					this.config.buttons[ item ].classList.map ( c=>button.classList.add ( c ) );
+					break;
+				}
+				case "String":
+				{
+					button.classList.add ( this.config.buttons[ item ].classList );
+					break;
+				}
+			}
+
+			if ( null === this.config.buttons[ item ].innerHTML )
+			{
+				button.innerHTML = "";
+			}
+			else if ( this.config.buttons[ item ].innerHTML )
+			{
+				button.innerHTML = this.config.buttons[ item ].innerHTML;
+			}
+			else switch ( item )
 			{
 				case "up":
 				{
 					button.innerHTML ||= "&#x21E6";
-					button.style.left ||= 0;
 					break;
 				}
 				case "down":
 				{
 					button.innerHTML ||= "&#x21E8";
-					button.style.right ||= 0;
 					break;
 				}
 				case "remove":
 				{
 					button.innerHTML ||= "&#x274C;";
+					break;	
+				}
+				case "update":
+				{
+					button.innerHTML ||= "&#8635;";
+					break;
+				}
+				case "index":
+				{
+					button.innerHTML = index;
+					break;
+				}
+			}
+
+			switch ( item )
+			{
+				case "up":
+				{
+					button.style.left ||= 0;
+					break;
+				}
+				case "down":
+				{
+					button.style.right ||= 0;
+					break;
+				}
+				case "remove":
+				{
 					button.style.fontWeight ||= "bold";
 					button.style.top ||= 0;
 					button.style.right ||= 0;
@@ -373,7 +420,6 @@ class Grid {
 				}
 				case "update":
 				{
-					button.innerHTML ||= "&#8635;";
 					button.style.fontWeight ||= "bold";
 					button.style.top ||= 0;
 					button.style.right ||= "1.4em";
@@ -382,7 +428,6 @@ class Grid {
 				}
 				case "index":
 				{
-					button.innerHTML = index;
 					button.style.top ||= 0;
 					button.style.left ||= 0;
 					button.style.width ||= "1.3em";
